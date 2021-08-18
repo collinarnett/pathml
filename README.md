@@ -1,93 +1,112 @@
-<img src=docs/source/_static/images/logo.png width="300"> 
+<img src=https://raw.githubusercontent.com/Dana-Farber-AIOS/pathml/master/docs/source/_static/images/logo.png width="300"> 
 
-<img src=docs/source/_static/images/overview.png width="750"> 
+<img src=https://raw.githubusercontent.com/Dana-Farber-AIOS/pathml/master/docs/source/_static/images/overview.png width="750">
+
+![tests](https://github.com/Dana-Farber-AIOS/pathml/actions/workflows/tests-conda.yml/badge.svg)
+[![Documentation Status](https://readthedocs.org/projects/pathml/badge/?version=latest)](https://pathml.readthedocs.io/en/latest/?badge=latest)
+[![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
+[![PyPI version](https://img.shields.io/pypi/v/pathml)](https://pypi.org/project/pathml/)
 
 A toolkit for computational pathology and machine learning.
 
-![tests](https://github.com/Dana-Farber-AIOS/pathml/actions/workflows/tests-conda.yml/badge.svg)
-[![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
+**View [documentation](https://pathml.readthedocs.io/en/latest/)**
 
-* [Installing](#installing)
-   * [Requirements](#requirements)
-   * [Installation](#installation)
-   * [Generate Documentation](#generate-documentation)
-   * [Tests and Code Coverage](#tests-and-code-coverage)
-* [Getting Started](#getting-started)
-* [Contributing](#contributing)
-* [Contact](#contact)
+# Installation
 
-# Installing
-## Installation
-0. Requirements
-* Set up Conda environment
-    * Download Miniconda [here](https://docs.conda.io/en/latest/miniconda.html)
-    * Create conda environment
-        ````
-        conda create --name pathml python=3.8 numpy==1.8.15
-        conda activate pathml
-        ````
-* Install CUDA. This step only applies if you want to use GPU acceleration for model training or other tasks. This guide should work, but for the most up-to-date instructions, refer to the [official PyTorch installation instructions](https://pytorch.org/get-started/locally/).
-    - Check the version of CUDA:
-        ````
-        nvidia-smi
-        ````
-    - Install correct version of `cudatoolkit`:
-        ````
-        # update this command with your CUDA version number
-        conda install cudatoolkit=11.0
-        ````
-* Install external dependencies  
-    * Linux: ``sudo apt-get install openslide-tools g++ gcc libblas-dev liblapack-dev``
-    * Mac: ``brew install openslide``
-* Install conda dependencies [OpenJDK](https://openjdk.java.net/)
-    * ``conda install openjdk==8.0.152``
+There are several ways to install `PathML`:
 
-2. Install PathML (conda)
-    * pip: ``pip install pathml`` 
+1. pip install
+2. clone repo to local machine and install from source
 
-3. Optionally verify PyTorch installation with GPU support: `python -c "import torch; print(torch.cuda.is_available())"`
+Options (1) and (2) require that you first install all external dependencies:
+* openslide
+* JDK 8
 
+We recommend using conda for environment management. 
+Download Miniconda [here](https://docs.conda.io/en/latest/miniconda.html)
 
-## Generate Documentation
+*Note: these instructions are for Linux. Commands may be different for other platforms.*
 
-This repo is not yet open to the public. Once we open source it, we will host documentation online.
-Until then, you must build a local copy of the documentation yourself.
+## Installation option 1: pip install
 
+Create conda environment
 ````
-# first install packages for generating docs
-pip install ipython sphinx nbsphinx nbsphinx-link sphinx-rtd-theme  
-cd docs         # enter docs directory
-make html       # build docs in html format
+conda create --name pathml python=3.8 numpy=1.18.5
+conda activate pathml
 ````
 
-Then use your favorite web browser to open ``pathml/docs/build/html/index.html``
-
-## Tests and Code Coverage 
-
-You may optionally run the test suite to verify installation. 
-
-To run tests:  
+Install external dependencies (Linux) with [Apt](https://ubuntu.com/server/docs/package-management)
 ````
-conda install pytest    # first install pytest package
-python -m pytest        # run test suite
+sudo apt-get install openslide-tools g++ gcc libblas-dev liblapack-dev
 ````
-Note that because the testing suite tests all parts of the code base, 
-this may require installing additional packages as well. 
-(e.g. installation of java is required for some functionality).
 
-You may also optionally measure code coverage, i.e. what percentage of code is covered in the testing suite.
+Install external dependencies (MacOS) with [Brew](www.brew.sh)
+````
+brew install openslide
+````
 
-To run tests and check code coverage, install all dependencies (including dependencies for multiparametric images), then:
-```
-conda install coverage  # install coverage package for code coverage
-coverage run            # run tests and calculate code coverage
-coverage report         # view coverage report
-coverage html           # optionally generate HTML coverage report
-```
+Install [OpenJDK 8](https://openjdk.java.net/)
+````
+conda install openjdk==8.0.152
+````
 
-# Getting Started
+Optionally install CUDA (instructions [here](#CUDA))
 
-The [example notebooks](examples) are a good place start with `PathML`.
+Install `PathML`
+````
+pip install pathml
+````
+
+## Installation option 2: clone repo and install from source
+
+Clone repo
+````
+git clone https://github.com/Dana-Farber-AIOS/pathml.git
+cd pathml
+````
+
+Create conda environment
+````
+conda env create -f environment.yml
+conda activate pathml
+````
+
+Optionally install CUDA (instructions [here](#CUDA))
+
+Install PathML: 
+````
+pip install -e .
+````
+
+## (Optionally) Register PathML as an IPython kernel
+````
+conda activate pathml
+conda install ipykernel
+python -m ipykernel install --user --name=pathml
+````
+This makes PathML available as a kernel in jupyter lab or notebook.
+
+## CUDA
+
+To use GPU acceleration for model training or other tasks, you must install CUDA. 
+This guide should work, but for the most up-to-date instructions, refer to the [official PyTorch installation instructions](https://pytorch.org/get-started/locally/).
+
+Check the version of CUDA:
+````
+nvidia-smi
+````
+
+Install correct version of `cudatoolkit`:
+````
+# update this command with your CUDA version number
+conda install cudatoolkit=11.0
+````
+
+After installing PyTorch, optionally verify successful PyTorch installation with CUDA support: 
+````
+python -c "import torch; print(torch.cuda.is_available())"
+````
+
 
 # Contributing
 
@@ -104,7 +123,7 @@ There are many ways to contribute to PathML, including:
 * Sharing trained model parameters
 * Sharing ``PathML`` with colleagues, students, etc.
 
-See [contributing](CONTRIBUTING.rst) for more details.
+See [contributing](https://github.com/Dana-Farber-AIOS/pathml/blob/master/CONTRIBUTING.rst) for more details.
 
 # Contact
 
@@ -112,4 +131,4 @@ Questions? Comments? Suggestions? Get in touch!
 
 [PathML@dfci.harvard.edu](mailto:PathML@dfci.harvard.edu)
 
-<img src=docs/source/_static/images/dfci_cornell_joint_logos.png width="750"> 
+<img src=https://raw.githubusercontent.com/Dana-Farber-AIOS/pathml/master/docs/source/_static/images/dfci_cornell_joint_logos.png width="750"> 
